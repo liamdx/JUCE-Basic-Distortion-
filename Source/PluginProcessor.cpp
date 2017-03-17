@@ -125,7 +125,7 @@ void NonLinearPracticeAudioProcessor::processBlock (AudioSampleBuffer& buffer, M
 {
     const int totalNumInputChannels  = getTotalNumInputChannels();
     const int totalNumOutputChannels = getTotalNumOutputChannels();
-    const float pi = 3.14159265359;
+    // const float pi = 3.14159265359;
 
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
@@ -138,8 +138,9 @@ void NonLinearPracticeAudioProcessor::processBlock (AudioSampleBuffer& buffer, M
     
     float x = 0.f;
     float y = 0.f;
-    float boost = 10.0f;
-    float drive = 10.0f;;
+    
+    float currentGain = gain;
+    float currentBoost = boost;
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
@@ -150,10 +151,10 @@ void NonLinearPracticeAudioProcessor::processBlock (AudioSampleBuffer& buffer, M
         for(int i = 0; i < buffer.getNumSamples(); i++){
             x = channelData[i];
             
-            float gain = ((boost / 100.0f) *100.0f) + 1.0f;
-            float a = std::sin(((drive + 1.0f) / 101.0f) * (pi / 2.0f));
+            float gain = ((currentBoost / 100.0f) * 100.0f) + 1.0f;
+            float a = std::sin(((gain + 1.0f) / 101.0f) * (pi / 2.0f));
             float k = (2.0f * a) / (1.0f - a);
-            y = ((1.0f - k) * (x)) / (1.0f + k * std::abs(x)) * gain;
+            y = ((1.0f - k) * (x)) / (1.0f + k * std::abs(x)) * currentGain;
             channelData[i] = y;
         }
     }
