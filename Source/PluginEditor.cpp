@@ -34,13 +34,13 @@ NonLinearPracticeAudioProcessorEditor::NonLinearPracticeAudioProcessorEditor (No
     //[/Constructor_pre]
 
     addAndMakeVisible (sliderBoost = new Slider ("boostSlider"));
-    sliderBoost->setRange (0, 10, 0);
+    sliderBoost->setRange (0, 1, 0);
     sliderBoost->setSliderStyle (Slider::LinearHorizontal);
     sliderBoost->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     sliderBoost->addListener (this);
 
     addAndMakeVisible (sliderGain = new Slider ("gainSlider"));
-    sliderGain->setRange (0, 10, 0);
+    sliderGain->setRange (0, 1, 0);
     sliderGain->setSliderStyle (Slider::LinearHorizontal);
     sliderGain->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     sliderGain->addListener (this);

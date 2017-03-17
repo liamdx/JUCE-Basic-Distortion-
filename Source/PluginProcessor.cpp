@@ -151,17 +151,8 @@ void NonLinearPracticeAudioProcessor::processBlock (AudioSampleBuffer& buffer, M
         for(int i = 0; i < buffer.getNumSamples(); i++){
             x = channelData[i];
             
-            float z = pi * currentGain;
-            float s = currentBoost / sin(z);
-            float b = currentBoost / currentGain;
-            
-            if(x > b){
-                y = x;
-            }else{
-                y = std::sin(z * x) * s;
-                y *= currentBoost;
-            }
-            
+            float k = (2 * currentGain) / (1 - currentGain);
+            float y = (1 + k) * x / (1 + k * std::abs(x));
             channelData[i] = y;
         }
     }
