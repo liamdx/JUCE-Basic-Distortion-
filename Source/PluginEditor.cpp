@@ -185,15 +185,19 @@ void NonLinearPracticeAudioProcessorEditor::buttonClicked (Button* buttonThatWas
     if (buttonThatWasClicked == toggleMode1)
     {
         processor.optionState = 0;
+        //toggleMode2 = 0;
+        //toggleMode3 = 0;
     }
     else if (buttonThatWasClicked == toggleMode2)
     {
-        processor.optionState = 1; 
+        processor.optionState = 1;
+        //toggleMode3 = 0;
     }
     else if (buttonThatWasClicked == toggleMode3)
     {
-        //[UserButtonCode_toggleMode3] -- add your button handler code here..
-        //[/UserButtonCode_toggleMode3]
+        processor.optionState = 2;
+        //toggleMode1 = 0;
+        //toggleMode2 = 0;
     }
 
     //[UserbuttonClicked_Post]

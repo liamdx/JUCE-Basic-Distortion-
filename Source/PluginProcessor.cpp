@@ -133,18 +133,7 @@ void NonLinearPracticeAudioProcessor::processBlock (AudioSampleBuffer& buffer, M
     // This is here to avoid people getting screaming feedback
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
-    if(optionState == 0)
-    {
-        mode = type1;
-    }else if (optionState == 1){
-        mode = type2;
-    }
-    else
-    {
-        mode = type1;
-    }
-    for (int i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
+    
     
     
     double input = 0.f;
@@ -154,7 +143,7 @@ void NonLinearPracticeAudioProcessor::processBlock (AudioSampleBuffer& buffer, M
     float currentOverdrive = overdrive;
     
     
-    if(mode == type1){
+    if(optionState == 0){
         for (int channel = 0; channel < totalNumInputChannels; ++channel)
         {
             float* channelData = buffer.getWritePointer (channel);
@@ -175,7 +164,7 @@ void NonLinearPracticeAudioProcessor::processBlock (AudioSampleBuffer& buffer, M
                 channelData[i] = output;
             }
         }
-    }else if(mode == type2){
+    }else if(optionState == 1){
         for (int channel = 0; channel < totalNumInputChannels; ++channel)
         {
             float* channelData = buffer.getWritePointer (channel);
@@ -188,6 +177,23 @@ void NonLinearPracticeAudioProcessor::processBlock (AudioSampleBuffer& buffer, M
                 channelData[i] = (exp(x) -exp(-x * a))/ (exp(x) + exp(-x));
             }
         }
+    }
+    else if (optionState == 2){
+        for (int channel = 0; channel < totalNumInputChannels; ++channel)
+        {
+            float* channelData = buffer.getWritePointer (channel);
+            
+            for(int i = 0; i < buffer.getNumSamples(); i++)
+            {
+                float calculatedGain = ((currentBoost/100)* 100) + 1;
+                input = channelData[i] * calculatedGain;
+                float a = sin(((currentOverdrive+1)/101)*(pi/2));
+                float k = 2 * a / (1-a);
+                output = (1 +k) * input/(1 + k * abs(input));
+                channelData[i] = output;
+            }
+        }
+        
     }
     
 }
