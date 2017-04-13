@@ -45,6 +45,30 @@
         <MODULEPATH id="juce_audio_plugin_client" path="../../Desktop/Audio Technology/Advanced Audio Processing/JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
+    <ANDROID targetFolder="Builds/Android">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" androidArchitectures="armeabi armeabi-v7a x86" isDebug="1"
+                       optimisation="1" targetName="NonLinearPractice"/>
+        <CONFIGURATION name="Release" androidArchitectures="armeabi armeabi-v7a x86"
+                       isDebug="0" optimisation="3" targetName="NonLinearPractice"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video" path="../../Desktop/Audio Technology/Advanced Audio Processing/JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../Desktop/Audio Technology/Advanced Audio Processing/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../Desktop/Audio Technology/Advanced Audio Processing/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../Desktop/Audio Technology/Advanced Audio Processing/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../Desktop/Audio Technology/Advanced Audio Processing/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../Desktop/Audio Technology/Advanced Audio Processing/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../Desktop/Audio Technology/Advanced Audio Processing/JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../Desktop/Audio Technology/Advanced Audio Processing/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../Desktop/Audio Technology/Advanced Audio Processing/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../Desktop/Audio Technology/Advanced Audio Processing/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../Desktop/Audio Technology/Advanced Audio Processing/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../Desktop/Audio Technology/Advanced Audio Processing/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../Desktop/Audio Technology/Advanced Audio Processing/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../Desktop/Audio Technology/Advanced Audio Processing/JUCE/modules"/>
+      </MODULEPATHS>
+    </ANDROID>
   </EXPORTFORMATS>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>

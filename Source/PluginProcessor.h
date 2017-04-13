@@ -55,11 +55,13 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-    
     // my vals
     float gain;
     float boost;
-    
+    float overdrive;
+    enum options {type1, type2, type3};
+    int optionState;
+    options mode;
 
 private:
     //==============================================================================

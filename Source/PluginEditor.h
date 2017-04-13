@@ -37,7 +37,8 @@
 */
 class NonLinearPracticeAudioProcessorEditor  : public AudioProcessorEditor,
                                                public Timer,
-                                               public SliderListener
+                                               public SliderListener,
+                                               public ButtonListener
 {
 public:
     //==============================================================================
@@ -53,6 +54,7 @@ public:
     void paint (Graphics& g) override;
     void resized() override;
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
+    void buttonClicked (Button* buttonThatWasClicked) override;
 
 
 
@@ -66,6 +68,11 @@ private:
     ScopedPointer<Slider> sliderGain;
     ScopedPointer<Label> label;
     ScopedPointer<Label> label2;
+    ScopedPointer<Slider> sliderOverdrive;
+    ScopedPointer<Label> label3;
+    ScopedPointer<ToggleButton> toggleMode1;
+    ScopedPointer<ToggleButton> toggleMode2;
+    ScopedPointer<ToggleButton> toggleMode3;
 
 
     //==============================================================================

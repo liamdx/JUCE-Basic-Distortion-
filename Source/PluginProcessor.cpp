@@ -84,6 +84,7 @@ void NonLinearPracticeAudioProcessor::changeProgramName (int index, const String
 {
 }
 
+
 //==============================================================================
 void NonLinearPracticeAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
@@ -125,7 +126,6 @@ void NonLinearPracticeAudioProcessor::processBlock (AudioSampleBuffer& buffer, M
 {
     const int totalNumInputChannels  = getTotalNumInputChannels();
     const int totalNumOutputChannels = getTotalNumOutputChannels();
-    // const float pi = 3.14159265359;
 
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
@@ -133,29 +133,63 @@ void NonLinearPracticeAudioProcessor::processBlock (AudioSampleBuffer& buffer, M
     // This is here to avoid people getting screaming feedback
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
+    if(optionState == 0)
+    {
+        mode = type1;
+    }else if (optionState == 1){
+        mode = type2;
+    }
+    else
+    {
+        mode = type1;
+    }
     for (int i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
     
-    float x = 0.f;
-    float y = 0.f;
     
+    double input = 0.f;
+    double output = 0.f;
     float currentGain = gain;
     float currentBoost = boost;
-
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        float* channelData = buffer.getWritePointer (channel);
-
-        for(int i = 0; i < buffer.getNumSamples(); i++){
-            x = channelData[i];
+    float currentOverdrive = overdrive;
+    
+    
+    if(mode == type1){
+        for (int channel = 0; channel < totalNumInputChannels; ++channel)
+        {
+            float* channelData = buffer.getWritePointer (channel);
             
-            float k = (2 * currentGain) / (1 - currentGain);
-            float y = (1 + k) * x / (1 + k * std::abs(x));
-            channelData[i] = y;
+            for(int i = 0; i < buffer.getNumSamples(); i++)
+            {
+                input = channelData[i]* currentGain;
+                //float k = (2 * currentOverdrive) / (currentBoost - currentOverdrive);
+                //output = (currentBoost + k) * input / (currentBoost + k * std::abs(input));
+                if(input < currentBoost){
+                    output = input;
+                }else if(input > currentBoost){
+                    output = currentBoost + (input - currentBoost)/ (1+pow(((input-currentBoost)/(1-currentBoost)),2));
+                }else if(input > 1){
+                    output = (currentBoost + 1) / 2;
+                }
+                
+                channelData[i] = output;
+            }
+        }
+    }else if(mode == type2){
+        for (int channel = 0; channel < totalNumInputChannels; ++channel)
+        {
+            float* channelData = buffer.getWritePointer (channel);
+            
+            for(int i = 0; i < buffer.getNumSamples(); i++)
+            {
+                input = channelData[i] * currentGain;;
+                const double x = input * 0.686306;
+                const double a = currentBoost + exp(sqrt(fabs(x)) * -0.75);
+                channelData[i] = (exp(x) -exp(-x * a))/ (exp(x) + exp(-x));
+            }
         }
     }
+    
 }
 
 //==============================================================================

@@ -34,32 +34,58 @@ NonLinearPracticeAudioProcessorEditor::NonLinearPracticeAudioProcessorEditor (No
     //[/Constructor_pre]
 
     addAndMakeVisible (sliderBoost = new Slider ("boostSlider"));
-    sliderBoost->setRange (0, 1, 0);
-    sliderBoost->setSliderStyle (Slider::LinearHorizontal);
+    sliderBoost->setRange (0, 2, 0);
+    sliderBoost->setSliderStyle (Slider::Rotary);
     sliderBoost->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     sliderBoost->addListener (this);
 
     addAndMakeVisible (sliderGain = new Slider ("gainSlider"));
-    sliderGain->setRange (0, 1, 0);
-    sliderGain->setSliderStyle (Slider::LinearHorizontal);
+    sliderGain->setRange (0, 10, 0);
+    sliderGain->setSliderStyle (Slider::Rotary);
     sliderGain->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     sliderGain->addListener (this);
 
     addAndMakeVisible (label = new Label ("new label",
                                           TRANS("Boost")));
-    label->setFont (Font (15.00f, Font::plain));
+    label->setFont (Font ("STSong", 28.00f, Font::plain));
     label->setJustificationType (Justification::centredLeft);
     label->setEditable (false, false, false);
     label->setColour (TextEditor::textColourId, Colours::black);
     label->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
     addAndMakeVisible (label2 = new Label ("new label",
-                                           TRANS("Gain")));
-    label2->setFont (Font (15.00f, Font::plain));
+                                           TRANS("Overdrive")));
+    label2->setFont (Font ("STSong", 28.00f, Font::plain));
     label2->setJustificationType (Justification::centredLeft);
     label2->setEditable (false, false, false);
     label2->setColour (TextEditor::textColourId, Colours::black);
     label2->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+
+    addAndMakeVisible (sliderOverdrive = new Slider ("overdriveSlider"));
+    sliderOverdrive->setRange (0, 10, 0);
+    sliderOverdrive->setSliderStyle (Slider::Rotary);
+    sliderOverdrive->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    sliderOverdrive->addListener (this);
+
+    addAndMakeVisible (label3 = new Label ("new label",
+                                           TRANS("Gain")));
+    label3->setFont (Font ("STSong", 28.00f, Font::plain));
+    label3->setJustificationType (Justification::centredLeft);
+    label3->setEditable (false, false, false);
+    label3->setColour (TextEditor::textColourId, Colours::black);
+    label3->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+
+    addAndMakeVisible (toggleMode1 = new ToggleButton ("mode1toggle"));
+    toggleMode1->setButtonText (TRANS("Mode 1"));
+    toggleMode1->addListener (this);
+
+    addAndMakeVisible (toggleMode2 = new ToggleButton ("mode2toggle"));
+    toggleMode2->setButtonText (TRANS("Mode 2"));
+    toggleMode2->addListener (this);
+
+    addAndMakeVisible (toggleMode3 = new ToggleButton ("mode3toggle"));
+    toggleMode3->setButtonText (TRANS("Mode 3"));
+    toggleMode3->addListener (this);
 
 
     //[UserPreSize]
@@ -82,6 +108,11 @@ NonLinearPracticeAudioProcessorEditor::~NonLinearPracticeAudioProcessorEditor()
     sliderGain = nullptr;
     label = nullptr;
     label2 = nullptr;
+    sliderOverdrive = nullptr;
+    label3 = nullptr;
+    toggleMode1 = nullptr;
+    toggleMode2 = nullptr;
+    toggleMode3 = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -94,7 +125,7 @@ void NonLinearPracticeAudioProcessorEditor::paint (Graphics& g)
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colours::white);
+    g.fillAll (Colour (0xff58c4c1));
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
@@ -108,7 +139,12 @@ void NonLinearPracticeAudioProcessorEditor::resized()
     sliderBoost->setBounds (40, 32, 150, 24);
     sliderGain->setBounds (40, 88, 150, 24);
     label->setBounds (216, 32, 150, 24);
-    label2->setBounds (216, 88, 150, 24);
+    label2->setBounds (216, 144, 150, 24);
+    sliderOverdrive->setBounds (40, 144, 150, 24);
+    label3->setBounds (216, 88, 150, 24);
+    toggleMode1->setBounds (40, 208, 150, 24);
+    toggleMode2->setBounds (40, 248, 150, 24);
+    toggleMode3->setBounds (40, 288, 150, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -130,9 +166,38 @@ void NonLinearPracticeAudioProcessorEditor::sliderValueChanged (Slider* sliderTh
         //[/UserSliderCode_sliderGain]
         processor.gain = sliderGain->getValue();
     }
+    else if (sliderThatWasMoved == sliderOverdrive)
+    {
+        //[UserSliderCode_sliderOverdrive] -- add your slider handling code here..
+        //[/UserSliderCode_sliderOverdrive]
+        processor.overdrive = sliderOverdrive->getValue();
+    }
 
     //[UsersliderValueChanged_Post]
     //[/UsersliderValueChanged_Post]
+}
+
+void NonLinearPracticeAudioProcessorEditor::buttonClicked (Button* buttonThatWasClicked)
+{
+    //[UserbuttonClicked_Pre]
+    //[/UserbuttonClicked_Pre]
+
+    if (buttonThatWasClicked == toggleMode1)
+    {
+        processor.optionState = 0;
+    }
+    else if (buttonThatWasClicked == toggleMode2)
+    {
+        processor.optionState = 1; 
+    }
+    else if (buttonThatWasClicked == toggleMode3)
+    {
+        //[UserButtonCode_toggleMode3] -- add your button handler code here..
+        //[/UserButtonCode_toggleMode3]
+    }
+
+    //[UserbuttonClicked_Post]
+    //[/UserbuttonClicked_Post]
 }
 
 
@@ -160,27 +225,43 @@ BEGIN_JUCER_METADATA
                  constructorParams="StereoPannerAudioProcessor&amp; p" variableInitialisers="AudioProcessorEditor(p), processor(p)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="0" initialWidth="600" initialHeight="400">
-  <BACKGROUND backgroundColour="ffffffff"/>
+  <BACKGROUND backgroundColour="ff58c4c1"/>
   <SLIDER name="boostSlider" id="32bddd3f573a7444" memberName="sliderBoost"
           virtualName="" explicitFocusOrder="0" pos="40 32 150 24" min="0"
-          max="10" int="0" style="LinearHorizontal" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          max="10" int="0" style="Rotary" textBoxPos="TextBoxLeft" textBoxEditable="1"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="gainSlider" id="4ad8d562c7b9cf" memberName="sliderGain"
           virtualName="" explicitFocusOrder="0" pos="40 88 150 24" min="0"
-          max="10" int="0" style="LinearHorizontal" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
+          max="10" int="0" style="Rotary" textBoxPos="TextBoxLeft" textBoxEditable="1"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <LABEL name="new label" id="2e5ef8115e58828b" memberName="label" virtualName=""
          explicitFocusOrder="0" pos="216 32 150 24" edTextCol="ff000000"
          edBkgCol="0" labelText="Boost" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="15"
-         bold="0" italic="0" justification="33"/>
+         focusDiscardsChanges="0" fontname="STSong" fontsize="28" bold="0"
+         italic="0" justification="33"/>
   <LABEL name="new label" id="5593b3326a9d3207" memberName="label2" virtualName=""
+         explicitFocusOrder="0" pos="216 144 150 24" edTextCol="ff000000"
+         edBkgCol="0" labelText="Overdrive" editableSingleClick="0" editableDoubleClick="0"
+         focusDiscardsChanges="0" fontname="STSong" fontsize="28" bold="0"
+         italic="0" justification="33"/>
+  <SLIDER name="overdriveSlider" id="b849ea9c5143a02e" memberName="sliderOverdrive"
+          virtualName="" explicitFocusOrder="0" pos="40 144 150 24" min="0"
+          max="10" int="0" style="Rotary" textBoxPos="TextBoxLeft" textBoxEditable="1"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
+  <LABEL name="new label" id="141129af75d1d1a7" memberName="label3" virtualName=""
          explicitFocusOrder="0" pos="216 88 150 24" edTextCol="ff000000"
          edBkgCol="0" labelText="Gain" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="15"
-         bold="0" italic="0" justification="33"/>
+         focusDiscardsChanges="0" fontname="STSong" fontsize="28" bold="0"
+         italic="0" justification="33"/>
+  <TOGGLEBUTTON name="mode1toggle" id="1c80dd10cf596d78" memberName="toggleMode1"
+                virtualName="" explicitFocusOrder="0" pos="40 208 150 24" buttonText="Mode 1"
+                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
+  <TOGGLEBUTTON name="mode2toggle" id="4f164ee637c4970f" memberName="toggleMode2"
+                virtualName="" explicitFocusOrder="0" pos="40 248 150 24" buttonText="Mode 2"
+                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
+  <TOGGLEBUTTON name="mode3toggle" id="abc8a9b5d86cf3f8" memberName="toggleMode3"
+                virtualName="" explicitFocusOrder="0" pos="40 288 150 24" buttonText="Mode 3"
+                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA
